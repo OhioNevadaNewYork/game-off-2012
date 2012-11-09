@@ -1,4 +1,4 @@
-var TARGET_FPS = 10; //Sorry, I don't know enough Javascript to do this correctly. Your fix is appreciated :).
+const TARGET_FPS = 24;
 
 window.onload = function() {
   var canvas = document.getElementById('canvas');
