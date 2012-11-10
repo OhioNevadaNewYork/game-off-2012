@@ -1,5 +1,5 @@
 var TARGET_SNIPPET_DENSITY = 0.0020833333; //Measured in snippets per 100 pixels. (A 10x10 block of pixels)
-var HIDDEN_SIM_SIZE_EXTEND_RATIO = 1; //Relative to visible sim size (what the camera can see).
+var HIDDEN_SIM_SIZE_EXTEND_RATIO = 0.5; //Relative to visible sim size (what the camera can see).
 
 function World(cContext, camera) {
   this._cContext = cContext;
@@ -113,8 +113,7 @@ World.prototype.Logic = function(deltaTime) {
       this._player.HandleSnippetCollision();
       delete this._snippets[snippet];
       this._SpawnSnippet(); //Immediately replace it for now.
-    }
-    if (!this._IsWithinSimBoundries(this._snippets[snippet].GetX(), this._snippets[snippet].GetY())) {
+    } else if (!this._IsWithinSimBoundries(this._snippets[snippet].GetX(), this._snippets[snippet].GetY())) {
       delete this._snippets[snippet];
       this._SpawnSnippet();
     }
