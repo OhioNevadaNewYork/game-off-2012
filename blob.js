@@ -7,13 +7,13 @@ function Blob(cContext, camera, x, y, size, text) {
   this._size = size;
   this._text = text;
 
-  this._xVel = 0;
-  this._yVel = 0;
+  this._velX = 0;
+  this._velY = 0;
 }
 
 Blob.prototype.Logic = function(deltaTime) {
-  this._x += this._xVel*deltaTime;
-  this._y += this._yVel*deltaTime;
+  this._x += this._velX*deltaTime;
+  this._y += this._velY*deltaTime;
 }
 
 Blob.prototype.Render = function() {
