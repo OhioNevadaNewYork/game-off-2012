@@ -34,3 +34,11 @@ Camera.prototype.Render = function(entity, x, y) {
   entity.Draw(this.ProjectX(x), this.ProjectY(y));
   //TODO: Apparently HTML5 canvas provides a transformation matrix! Really awesome, use it.
 }
+
+Camera.prototype.GetViewWidth = function() {
+  return this._width;
+}
+
+Camera.prototype.GetViewHeight = function() {
+  return this._height;
+}

@@ -37,7 +37,10 @@ Player.prototype.Logic = function(deltaTime) {
     this._velY = 0;
   }
 
-  //this._size = Math.sqrt(this._codeSize);
-
   Blob.prototype.Logic.call(this, deltaTime);
+}
+
+Player.prototype.HandleSnippetCollision = function() {
+  this._codeSize += 70;
+  this._size = Math.sqrt(this._codeSize);
 }

@@ -29,3 +29,15 @@ Blob.prototype.Draw = function(x, y) {
   var textWidth = this._cContext.measureText(this._text).width;
   this._cContext.fillText(this._text, x - textWidth/2, y+2.5);
 }
+
+Blob.prototype.GetSize = function() {
+  return this._size;
+}
+
+Blob.prototype.GetX = function() {
+  return this._x;
+}
+
+Blob.prototype.GetY = function() {
+  return this._y;
+}

@@ -11,7 +11,7 @@ function Snippet(cContext, camera, x, y) {
 
 Snippet.prototype.Logic = function(deltaTime) {
   this._satisfaction -= deltaTime;
-  if(this._satisfaction <= 0) {
+  if (this._satisfaction <= 0) {
     var newDirection = Math.random()*2*Math.PI;
     var newSpeed = SNIPPET_SPEEDMAX - (SNIPPET_SPEEDMAX*0.5)*Math.random();
     this._velX = Math.cos(newDirection)*newSpeed;
