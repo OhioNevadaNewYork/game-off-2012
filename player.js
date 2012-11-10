@@ -7,40 +7,12 @@ const A_KEYCODE = 65;
 const S_KEYCODE = 83;
 const D_KEYCODE = 68;*/
 
-Player.prototype = new Blob();
+Player.prototype = new Repo();
 function Player(cContext) {
-  this._codeSize = STARTING_CODESIZE;
-
-  this._targetX = 0; //Used for tapping/clicking controls.
-  this._targetY = 0;
-
-  Blob.call(this, cContext, 0, 0, Math.sqrt(this._codeSize), ".git");
+  Repo.call(this, cContext, 0, 0, STARTING_CODESIZE, ".git");
+  this._speed = PLAYER_SPEED;
 }
 
 Player.prototype.HandleInput = function(event) {
-  //TODO: smooth the motion. [This is right up my ally as an applied math major, but you (Nate especially) are free to implement it.]
-
-  this._targetX = event.worldX;
-  this._targetY = event.worldY;
-
-  var angle = Math.atan2(this._targetY-this._y, this._targetX-this._x);
-  this._velX = Math.cos(angle)*PLAYER_SPEED;
-  this._velY = Math.sin(angle)*PLAYER_SPEED;
-}
-
-Player.prototype.Logic = function(deltaTime) {
-  //Navigation
-  if (Math.abs(this._x - this._targetX) < NAVIGATION_TOLERANCY) {
-    this._velX = 0;
-  }
-  if (Math.abs(this._y - this._targetY) < NAVIGATION_TOLERANCY) {
-    this._velY = 0;
-  }
-
-  Blob.prototype.Logic.call(this, deltaTime);
-}
-
-Player.prototype.HandleSnippetCollision = function() {
-  this._codeSize += 70;
-  this._size = Math.sqrt(this._codeSize);
+  this._SetTarget(event.worldX, event.worldY);
 }

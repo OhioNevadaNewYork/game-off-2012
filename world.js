@@ -1,5 +1,6 @@
 var TARGET_SNIPPET_DENSITY = 0.0020833333; //Measured in snippets per 100 pixels. (A 10x10 block of pixels)
 var HIDDEN_SIM_SIZE_EXTEND_RATIO = 0.5; //Relative to visible sim size (what the camera can see).
+var RANDOM_REPO_SIZE_TOLERANCY = 2000; //Essentially how volatile/unstable/variable the difficulty is. TODO: Should follow normal distribution.
 
 function World(cContext, camera) {
   this._cContext = cContext;
@@ -8,12 +9,18 @@ function World(cContext, camera) {
   this._targetSnippetCount = this._GetTargetSnippetCount();
   this._hiddenSimSizeExtend = this._GetHiddenSimSizeExtend();
 
+  this._UpdateSimBoundries();
+
+  //this._unsimulatedPersistentState = {seenRepos: {}};
+
   this._player = new Player(this._cContext);
+
+  this._repos = {};
+  this._reposSpawned = 0;
+  this._reposActive = 0; //This is getting ridiculous. I'm sure JS has better datastructures?!
 
   this._snippets = {};
   this._snippetsSpawned = 0;
-
-  this._UpdateSimBoundries();
 
   while (this._snippetsSpawned < this._targetSnippetCount) {
     this._SpawnSnippet();
@@ -24,6 +31,25 @@ World.prototype._SpawnSnippet = function() {
   var coord = this._GetSpawnableCoord(SNIPPET_SIZE);
   this._snippets[this._snippetsSpawned] = new Snippet(this._cContext, coord[0], coord[1]);
   this._snippetsSpawned++;
+}
+
+World.prototype._SpawnRepo = function(codeSize, name) {
+  var coord = this._GetSpawnableCoord(RepoCodeSizeToSize(codeSize));
+  this._repos[this._reposSpawned] = new AIRepo(this._cContext, coord[0], coord[1], codeSize, name);
+  this._reposSpawned++;
+  this._reposActive++;
+}
+
+World.prototype._SpawnRandomRepo = function(targetCodeSize) {
+  var upperLimit = targetCodeSize+(RANDOM_REPO_SIZE_TOLERANCY/2);
+  var lowerLimit = targetCodeSize-(RANDOM_REPO_SIZE_TOLERANCY/2);
+
+  for (repo in SOFTWARE) { //Obviously better algorithms
+    if ((repo >= lowerLimit) && (repo <= upperLimit)) {
+      this._SpawnRepo(repo, SOFTWARE[repo]);
+      break;
+    }
+  }
 }
 
 World.prototype._GetHiddenSimSizeExtend = function() {
@@ -82,12 +108,8 @@ World.prototype._GetSpawnableCoord = function(radiusOfSpawnable) {
     bottomBoundry = this._simBoundries.bottom;
   }
 
-  var x, y;
-  //do {
-  x = Math.random()*(rightBoundry-leftBoundry) + leftBoundry;
-  y = Math.random()*(bottomBoundry-topBoundry) + topBoundry;
-  //} while (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) < SPAWN_DISTANCE)
-
+  var x = Math.random()*(rightBoundry-leftBoundry) + leftBoundry;
+  var y = Math.random()*(bottomBoundry-topBoundry) + topBoundry;
   return new Array(x, y);
 }
 
@@ -118,6 +140,21 @@ World.prototype.Logic = function(deltaTime) {
       this._SpawnSnippet();
     }
   }
+
+  for (repo in this._repos) {
+    this._repos[repo].Logic(deltaTime);
+    if (!this._IsWithinSimBoundries(this._repos[repo].GetX(), this._repos[repo].GetY())) {
+      delete this._repos[repo];
+      this._reposActive--;
+    }
+  }
+
+  //if (this._player.GetCodeSize() >= 1000) {
+  if(this._reposActive == 0) {
+    //this._SpawnRandomRepo(this._player.GetCodeSize());
+    this._SpawnRandomRepo(6000);
+  }
+  //}
 }
 
 World.prototype.Render = function() {
@@ -125,5 +162,9 @@ World.prototype.Render = function() {
 
   for (snippet in this._snippets) {
     this._snippets[snippet].Render();
+  }
+
+  for (repo in this._repos) {
+    this._repos[repo].Render();
   }
 }
