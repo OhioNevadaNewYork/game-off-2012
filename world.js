@@ -44,6 +44,7 @@ World.prototype.HandleInput = function(event) {
 
 World.prototype.Logic = function(deltaTime) {
   this._player.Logic(deltaTime);
+  this._camera.Track(this._player.GetX(), this._player.GetY());
   for (var i = 0; i < 10; i++) {
     if (this._testSnippets[i]) {
       this._testSnippets[i].Logic(deltaTime);
@@ -58,6 +59,7 @@ World.prototype.Logic = function(deltaTime) {
 
 World.prototype.Render = function() {
   this._player.Render();
+
   for (var i = 0; i < 10; i++) {
     if (this._testSnippets[i]) {
       this._testSnippets[i].Render();
