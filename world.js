@@ -5,12 +5,12 @@ function World(cContext, camera) {
   this._cContext = cContext;
   this._camera = camera;
 
-  this._player = new Player(this._cContext, this._camera, 0, 0);
+  this._player = new Player(this._cContext);
 
   this._testSnippets = new Array();
   for (var i = 0; i < STARTING_SNIPPETS; i++) {
     var coord = this._GetSpawnableCoord();
-    this._testSnippets[i] = new Snippet(this._cContext, this._camera, coord[0], coord[1]);
+    this._testSnippets[i] = new Snippet(this._cContext, coord[0], coord[1]);
   }
 }
 

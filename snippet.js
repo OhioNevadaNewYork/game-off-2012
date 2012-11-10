@@ -3,8 +3,8 @@ var SNIPPET_SPEEDMAX = 50;
 
 
 Snippet.prototype = new Blob();
-function Snippet(cContext, camera, x, y) {
-  Blob.call(this, cContext, camera, x, y, 20, "<code>");
+function Snippet(cContext, x, y) {
+  Blob.call(this, cContext, x, y, 20, "<code>");
 
   this._satisfaction = 0; //"Satisfaction" is basically a TTL for the current direction the blob is traveling.
 }

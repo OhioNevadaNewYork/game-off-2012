@@ -8,13 +8,13 @@ const S_KEYCODE = 83;
 const D_KEYCODE = 68;*/
 
 Player.prototype = new Blob();
-function Player(cContext, camera, x, y) {
+function Player(cContext) {
   this._codeSize = STARTING_CODESIZE;
 
-  this._targetX = x; //Used for tapping/clicking controls.
-  this._targetY = y;
+  this._targetX = 0; //Used for tapping/clicking controls.
+  this._targetY = 0;
 
-  Blob.call(this, cContext, camera, x, y, Math.sqrt(this._codeSize), ".git");
+  Blob.call(this, cContext, 0, 0, Math.sqrt(this._codeSize), ".git");
 }
 
 Player.prototype.HandleInput = function(event) {
