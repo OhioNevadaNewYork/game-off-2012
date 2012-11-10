@@ -11,6 +11,7 @@ function Camera(cContext, width, height) {
 
 Camera.prototype.Track = function(x, y) {
   // Similar to Move(), but much more loose tracking.
+  //TODO: smooth the motion. [This is right up my ally as an applied math major, but you (Nate especially) are free to implement it.]
 
   if (this.ProjectX(x) > this._width*(3/4)) {
     this.Move(this._x + (this.ProjectX(x) - this._width*(3/4)), this._y);
