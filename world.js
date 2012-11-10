@@ -15,13 +15,13 @@ function World(cContext, camera) {
 
   this._UpdateSimBoundries();
 
-  while ( this._snippetsSpawned < this._targetSnippetCount) {
+  while (this._snippetsSpawned < this._targetSnippetCount) {
     this._SpawnSnippet();
   }
 }
 
 World.prototype._SpawnSnippet = function() {
-  var coord = this._GetSpawnableCoord();
+  var coord = this._GetSpawnableCoord(SNIPPET_SIZE);
   this._snippets[this._snippetsSpawned] = new Snippet(this._cContext, coord[0], coord[1]);
   this._snippetsSpawned++;
 }
@@ -38,17 +38,17 @@ World.prototype._GetTargetSnippetCount = function() {
 }
 
 World.prototype._UpdateSimBoundries = function() {
-  this._simBoundries = {left: this._player.GetX() - this._camera.GetViewWidth()/2 - this._hiddenSimSizeExtend,
-                        right: this._player.GetX() + this._camera.GetViewWidth()/2 + this._hiddenSimSizeExtend,
-                        top: this._player.GetY() - this._camera.GetViewHeight()/2 - this._hiddenSimSizeExtend,
-                        bottom: this._player.GetY() + this._camera.GetViewHeight()/2 + this._hiddenSimSizeExtend};
+  this._simBoundries = {left: this._camera.GetX() - this._camera.GetViewWidth()/2 - this._hiddenSimSizeExtend,
+                        right: this._camera.GetX() + this._camera.GetViewWidth()/2 + this._hiddenSimSizeExtend,
+                        top: this._camera.GetY() - this._camera.GetViewHeight()/2 - this._hiddenSimSizeExtend,
+                        bottom: this._camera.GetY() + this._camera.GetViewHeight()/2 + this._hiddenSimSizeExtend};
 }
 
 World.prototype._IsWithinSimBoundries = function(x, y) {
   return (x <= this._simBoundries.right && x >= this._simBoundries.left) && (y <= this._simBoundries.bottom && y >= this._simBoundries.top);
 }
 
-World.prototype._GetSpawnableCoord = function() {
+World.prototype._GetSpawnableCoord = function(radiusOfSpawnable) {
   //Spawn only within the hidden sim space
 
   var playerToEdgeDistX = this._camera.GetViewWidth()/2 + this._hiddenSimSizeExtend;
@@ -62,23 +62,23 @@ World.prototype._GetSpawnableCoord = function() {
   var hiddenSection = Math.floor(Math.random()*4);
   if(hiddenSection == 0) {
     leftBoundry =   this._simBoundries.left;
-    rightBoundry =  this._player.GetX() - this._camera.GetViewWidth()/2;
+    rightBoundry =  this._camera.GetX() - this._camera.GetViewWidth()/2 - radiusOfSpawnable;
     topBoundry =    this._simBoundries.top;
-    bottomBoundry = this._player.GetY() + this._camera.GetViewHeight()/2;
+    bottomBoundry = this._camera.GetY() + this._camera.GetViewHeight()/2;
   } else if (hiddenSection == 1) {
-    leftBoundry =   this._player.GetX() - this._camera.GetViewWidth()/2;
+    leftBoundry =   this._camera.GetX() - this._camera.GetViewWidth()/2;
     rightBoundry =  this._simBoundries.right;
     topBoundry =    this._simBoundries.top;
-    bottomBoundry = this._player.GetY() - this._camera.GetViewHeight()/2;
+    bottomBoundry = this._camera.GetY() - this._camera.GetViewHeight()/2 - radiusOfSpawnable;
   } else if (hiddenSection == 2) {
-    leftBoundry =   this._player.GetX() + this._camera.GetViewWidth()/2;
+    leftBoundry =   this._camera.GetX() + this._camera.GetViewWidth()/2 + radiusOfSpawnable;
     rightBoundry =  this._simBoundries.right;
-    topBoundry =    this._player.GetY() - this._camera.GetViewHeight()/2;
+    topBoundry =    this._camera.GetY() - this._camera.GetViewHeight()/2;
     bottomBoundry = this._simBoundries.bottom;
   } else {
     leftBoundry =   this._simBoundries.left;
-    rightBoundry =  this._player.GetX() + this._camera.GetViewWidth()/2;
-    topBoundry =    this._player.GetY() + this._camera.GetViewHeight()/2;
+    rightBoundry =  this._camera.GetX() + this._camera.GetViewWidth()/2;
+    topBoundry =    this._camera.GetY() + this._camera.GetViewHeight()/2 + radiusOfSpawnable;
     bottomBoundry = this._simBoundries.bottom;
   }
 

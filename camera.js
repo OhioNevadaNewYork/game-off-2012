@@ -58,3 +58,11 @@ Camera.prototype.GetViewWidth = function() {
 Camera.prototype.GetViewHeight = function() {
   return this._height;
 }
+
+Camera.prototype.GetX = function() {
+  return this._x;
+}
+
+Camera.prototype.GetY = function() {
+  return this._y;
+}
