@@ -21,7 +21,7 @@ RepoManager.prototype.SpawnRandomRepo = function(targetCodeSize) {
   for (repo in SOFTWARE) { //Obviously better algorithms
     codeSize = parseInt(repo);
     if ((codeSize >= lowerLimit) && (codeSize <= upperLimit)) {
-      console.log("DEBUG: SPAWNING "+SOFTWARE[repo]);
+      console.log("SPAWNING "+SOFTWARE[repo]);
       return this.SpawnRepo(codeSize, SOFTWARE[repo]);
     }
   }
@@ -51,7 +51,6 @@ RepoManager.prototype.Logic = function(deltaTime) {
 
         winner[1].HandleRepoCollision(loser[1]);
         loser[1].Disintegrate(winner[1]);
-         console.log("DELETING LOSER, ID "+loser[0]+". NAME: "+loser[1].GetName());
         this.DeleteEntity(loser[0]);
 
         break; //Easier than worry about iterating over nonexistant entries. No real difference.

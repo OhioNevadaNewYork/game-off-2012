@@ -12,6 +12,12 @@ Player.prototype.HandleInput = function(event) {
   this._SetTarget(event.worldX, event.worldY);
 }
 
+Player.prototype.AddDeathListener = function(listenerFunc) {
+  this._deathListener = listenerFunc;
+}
+
 Player.prototype.Disintegrate = function(terminator) {
-  alert("Killed by "+terminator.GetName()+". You had "+this._codeSize+" lines of code.");
+  if (this._deathListener) {
+    this._deathListener(this, terminator);
+  }
 }

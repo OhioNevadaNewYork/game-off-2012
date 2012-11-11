@@ -59,11 +59,14 @@ Game.prototype.Step = function(deltaTime) {
     this._needsTooltip["absorb"] = false;
   }
 
-  this._world.Logic(deltaTime);
-
+  var fatalState = this._world.Logic(deltaTime);
   tooltipMan.Logic(deltaTime);
 
   this._Render();
+
+  if (fatalState) {
+    this._RunGameOverSequence(fatalState);
+  }
 }
 
 Game.prototype._Render = function() {
@@ -93,14 +96,32 @@ Game.prototype._DisplayPauseScreen = function() {
     game._debugRender = debugRenderCheckbox.checked;
     game._Render();
   });
-
-  /*this._tag = document.createElement("div");;
-  container.insertBefore(this._tag, container.childNodes[0]);
-  this._tag.id = "debug-tag";
-  this._tag.innerHTML = "DEBUG";*/
 }
 
 Game.prototype._HidePauseScreen = function() {
   var pauseScreen = document.getElementById("pause-screen");
   pauseScreen.parentNode.removeChild(pauseScreen);
+}
+
+Game.prototype._RunGameOverSequence = function(fatalState) {
+  StopGameLoop();
+  console.log("Killed by "+fatalState.aggressorName+". Player had "+fatalState.codeSize+" lines of code.");
+
+  //Special effects!
+
+  //Game over screen
+  var gameoverScreen = document.createElement("div");
+  var container = document.getElementById("overlay-container");
+  container.insertBefore(gameoverScreen, container.childNodes[0]);
+  gameoverScreen.id = "gameover-screen";
+  gameoverScreen.innerHTML = "<h2>Game Over</h2>"+
+  "<p>Lines of code in your repository at the time of your demise: "+fatalState.codeSize+"</p>"+
+  "<p>Your aggressor: "+fatalState.aggressorName+"</p>"+
+  "<input type=\"button\" id=\"retry-button\" value=\"retry?\" />";
+
+  document.getElementById("retry-button").addEventListener('click', function(event) {
+    gameoverScreen.parentNode.removeChild(gameoverScreen);
+    //NewGame(); //Glitchy
+    window.location.reload();
+  });
 }

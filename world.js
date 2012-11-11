@@ -11,7 +11,6 @@ function World(cContext, camera) {
   this._snippetMan = new SnippetManager(this, this._repoMan);
   this._snippetMan.SetTargetSnippetCount(this._GetSimArea()/100 * TARGET_SNIPPET_DENSITY);
 
-  this._player = this._repoMan.SpawnPlayer()[1];
 
   var world = this;
   this._camera.AddZoomListener(function(){
@@ -19,8 +18,15 @@ function World(cContext, camera) {
     world._UpdateSimBoundries();
     world._snippetMan.SetTargetSnippetCount(world._GetSimArea()/100 * TARGET_SNIPPET_DENSITY);
   });
-
   this._camera.SetZoom(1);
+
+  this._player = this._repoMan.SpawnPlayer()[1];
+  this._fatalState = false;
+  this._player.AddDeathListener(function(player, terminator) {
+    world._fatalState = {"codeSize": player.GetCodeSize(),
+                         "aggressorCodeSize": terminator.GetCodeSize(),
+                         "aggressorName": terminator.GetName()};
+  });
 }
 
 World.prototype._GetHiddenSimSizeExtend = function() {
@@ -100,9 +106,7 @@ World.prototype.Logic = function(deltaTime) {
   this._repoMan.Logic(deltaTime);
   this._snippetMan.Logic(deltaTime);
 
-  if (!this._player) {
-    alert("Game over");
-  }
+  return this._fatalState;
 }
 
 World.prototype.DebugRender = function() {

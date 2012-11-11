@@ -1,10 +1,11 @@
 var TARGET_FPS = 24;
+var gameLoop_IntervalId = undefined;
 
 window.onload = function() {
   var canvas = document.getElementById('canvas');
   var game = new Game(canvas);
 
-  setInterval(function(){
+  gameLoop_IntervalId = setInterval(function(){
     game.Step(1/TARGET_FPS);
   }, 1000/TARGET_FPS);
 
@@ -19,3 +20,8 @@ window.onload = function() {
     game.HandleInput(event);
   });
 };
+
+
+function StopGameLoop() {
+  clearInterval(gameLoop_IntervalId);
+}
