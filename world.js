@@ -45,8 +45,9 @@ World.prototype._SpawnRandomRepo = function(targetCodeSize) {
   var lowerLimit = targetCodeSize-(RANDOM_REPO_SIZE_TOLERANCY/2);
 
   for (repo in SOFTWARE) { //Obviously better algorithms
-    if ((repo >= lowerLimit) && (repo <= upperLimit)) {
-      this._SpawnRepo(repo, SOFTWARE[repo]);
+    codeSize = parseInt(repo);
+    if ((codeSize >= lowerLimit) && (codeSize <= upperLimit)) {
+      this._SpawnRepo(codeSize, SOFTWARE[repo]);
       break;
     }
   }
@@ -138,6 +139,15 @@ World.prototype.Logic = function(deltaTime) {
     } else if (!this._IsWithinSimBoundries(this._snippets[snippet].GetX(), this._snippets[snippet].GetY())) {
       delete this._snippets[snippet];
       this._SpawnSnippet();
+    } else if (this._reposActive >= 1) {
+      for (repo in this._repos) {
+        if (this._IsCollided(this._snippets[snippet].GetX(), this._snippets[snippet].GetY(), this._snippets[snippet].GetSize(), this._repos[repo].GetX(), this._repos[repo].GetY(), this._repos[repo].GetSize())) {
+          this._repos[repo].HandleSnippetCollision();
+          delete this._snippets[snippet];
+          this._SpawnSnippet();
+          break;
+        }
+      }
     }
   }
 
