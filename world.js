@@ -7,11 +7,11 @@ function World(cContext, camera) {
 
   //this._unsimulatedPersistentState = {seenRepos: {}};
 
-  this._player = new Player();
-
-  this._repoMan = new RepoManager(this, this._player);
-  this._snippetMan = new SnippetManager(this, this._repoMan, this._player);
+  this._repoMan = new RepoManager(this);
+  this._snippetMan = new SnippetManager(this, this._repoMan);
   this._snippetMan.SetTargetSnippetCount(this._GetSimArea()/100 * TARGET_SNIPPET_DENSITY);
+
+  this._player = this._repoMan.SpawnPlayer()[1];
 
   var world = this;
   this._camera.AddZoomListener(function(){
@@ -88,22 +88,20 @@ World.prototype.HandleInput = function(event) {
 }
 
 World.prototype.Logic = function(deltaTime) {
-  this._player.Logic(deltaTime);
-
   this._camera.Track(this._player.GetX(), this._player.GetY());
   this._UpdateSimBoundries();
 
-  this._snippetMan.Logic(deltaTime);
+  if (this._player.GetCodeSize() >= 1000) {
+    if((this._repoMan.GetEntityCount()-1) == 0) {
+      this._repoMan.SpawnRandomRepo(this._player.GetCodeSize());
+    }
+  }
+
   this._repoMan.Logic(deltaTime);
+  this._snippetMan.Logic(deltaTime);
 }
 
 World.prototype.DebugRender = function() {
-  this._player.DebugRender(this._cContext);
-
   this._snippetMan.DebugRender(this._cContext);
   this._repoMan.DebugRender(this._cContext);
-}
-
-function IsCollided(x1, y1, r1, x2, y2, r2) {
-  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) < r1 + r2
 }

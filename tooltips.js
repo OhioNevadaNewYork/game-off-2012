@@ -1,4 +1,4 @@
-READING_RATE = 240; //WPM. Real rate is about 300 on average, but it's okay to be slow.
+READING_RATE = 200; //WPM. Real rate is about 300 on average, but it's okay to be slow.
 TOOLTIP_IDLE_TIME = 1.2; //Seconds to idle nomatter what. Allows the player to notice tooltip and begin reading.
 //TOOLTIP_ANIM_TIME = 0.2;
 

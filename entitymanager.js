@@ -10,11 +10,23 @@ EntityManager.prototype.SpawnEntity = function(entity) {
   this._entities[this._entitiesSpawned] = entity;
   this._entitiesSpawned++;
   this._entitiesAlive++;
+
+  return [this._entitiesSpawned-1, entity];
 }
 
 EntityManager.prototype.DeleteEntity = function(entityId) {
   delete this._entities[entityId];
   this._entitiesAlive--;
+}
+
+EntityManager.prototype.CheckForCollision = function(x, y, size) { //returns whatever entity collides with given point
+  for (entity in this._entities) {
+    if (IsCollided(this._entities[entity].GetX(), this._entities[entity].GetY(), this._entities[entity].GetSize(), x, y, size)) {
+      return [entity, this._entities[entity]];
+    }
+  }
+
+  return undefined;
 }
 
 EntityManager.prototype.Logic = function(deltaTime) {
