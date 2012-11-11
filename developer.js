@@ -33,7 +33,7 @@ Developer.prototype.GetAngle = function() {
   return this._angle;
 }
 
-Developer.prototype.Render = function(cContext) {
+Developer.prototype.DebugRender = function(cContext) {
   cContext.beginPath();
   cContext.moveTo(this._x,                        this._y-DEVELOPER_ICON_OFFSETY);
   cContext.lineTo(this._x+DEVELOPER_ICON_OFFSETX, this._y+DEVELOPER_ICON_OFFSETY);

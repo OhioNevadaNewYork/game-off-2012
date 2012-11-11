@@ -1,4 +1,4 @@
-#debug-screen {
+#pause-screen {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -8,6 +8,23 @@
   color: white;
   opacity: 0.8;
 }
+
+#pause-screen > h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#pause-screen > p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#pause-screen > h3 {
+  font-size: 20px;
+  margin-top: 10px;
+}
+
 
 #canvas {
   background-color: #fdfdfd;

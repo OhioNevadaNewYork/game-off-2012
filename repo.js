@@ -55,11 +55,11 @@ Repo.prototype.Logic = function(deltaTime) {
   });
 }
 
-Repo.prototype.Render = function(cContext) {
-  Blob.prototype.Render.call(this, cContext);
+Repo.prototype.DebugRender = function(cContext) {
+  Blob.prototype.DebugRender.call(this, cContext);
 
   this._developers.forEach(function(developer){
-    developer.Render(cContext);
+    developer.DebugRender(cContext);
   });
 }
 

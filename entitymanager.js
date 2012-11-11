@@ -26,9 +26,9 @@ EntityManager.prototype.Logic = function(deltaTime) {
   }
 }
 
-EntityManager.prototype.Render = function(cContext) {
+EntityManager.prototype.DebugRender = function(cContext) {
   for (entity in this._entities) {
-    this._entities[entity].Render(cContext);
+    this._entities[entity].DebugRender(cContext);
   }
 }
 

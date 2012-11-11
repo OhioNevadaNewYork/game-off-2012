@@ -97,11 +97,11 @@ World.prototype.Logic = function(deltaTime) {
   this._repoMan.Logic(deltaTime);
 }
 
-World.prototype.Render = function() {
-  this._player.Render(this._cContext);
+World.prototype.DebugRender = function() {
+  this._player.DebugRender(this._cContext);
 
-  this._snippetMan.Render(this._cContext);
-  this._repoMan.Render(this._cContext);
+  this._snippetMan.DebugRender(this._cContext);
+  this._repoMan.DebugRender(this._cContext);
 }
 
 function IsCollided(x1, y1, r1, x2, y2, r2) {

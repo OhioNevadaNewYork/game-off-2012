@@ -12,7 +12,7 @@ Blob.prototype.Logic = function(deltaTime) {
   this._y += this._velY*deltaTime;
 }
 
-Blob.prototype.Render = function(cContext) {
+Blob.prototype.DebugRender = function(cContext) {
   cContext.beginPath();
   cContext.arc(this._x, this._y, this._size, 0, 2*Math.PI);
   cContext.stroke();
