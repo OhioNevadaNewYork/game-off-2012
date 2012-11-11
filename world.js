@@ -5,10 +5,6 @@ function World(cContext, camera) {
   this._cContext = cContext;
   this._camera = camera;
 
-  this._hiddenSimSizeExtend = this._GetHiddenSimSizeExtend();
-
-  this._UpdateSimBoundries();
-
   //this._unsimulatedPersistentState = {seenRepos: {}};
 
   this._player = new Player();
@@ -16,6 +12,15 @@ function World(cContext, camera) {
   this._repoMan = new RepoManager(this, this._player);
   this._snippetMan = new SnippetManager(this, this._repoMan, this._player);
   this._snippetMan.SetTargetSnippetCount(this._GetSimArea()/100 * TARGET_SNIPPET_DENSITY);
+
+  var world = this;
+  this._camera.AddZoomListener(function(){
+    world._hiddenSimSizeExtend = world._GetHiddenSimSizeExtend();
+    world._UpdateSimBoundries();
+    world._snippetMan.SetTargetSnippetCount(world._GetSimArea()/100 * TARGET_SNIPPET_DENSITY);
+  });
+
+  this._camera.SetZoom(1);
 }
 
 World.prototype._GetHiddenSimSizeExtend = function() {
