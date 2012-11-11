@@ -1,12 +1,10 @@
 var TARGET_SNIPPET_DENSITY = 0.0020833333; //Measured in snippets per 100 pixels. (A 10x10 block of pixels)
 var HIDDEN_SIM_SIZE_EXTEND_RATIO = 0.5; //Relative to visible sim size (what the camera can see).
-var RANDOM_REPO_SIZE_TOLERANCY = 2000; //Essentially how volatile/unstable/variable the difficulty is. TODO: Should follow normal distribution.
 
 function World(cContext, camera) {
   this._cContext = cContext;
   this._camera = camera;
 
-  this._targetSnippetCount = this._GetTargetSnippetCount();
   this._hiddenSimSizeExtend = this._GetHiddenSimSizeExtend();
 
   this._UpdateSimBoundries();
@@ -15,42 +13,9 @@ function World(cContext, camera) {
 
   this._player = new Player();
 
-  this._repos = {};
-  this._reposSpawned = 0;
-  this._reposActive = 0; //This is getting ridiculous. I'm sure JS has better datastructures?!
-
-  this._snippets = {};
-  this._snippetsSpawned = 0;
-
-  while (this._snippetsSpawned < this._targetSnippetCount) {
-    this._SpawnSnippet();
-  }
-}
-
-World.prototype._SpawnSnippet = function() {
-  var coord = this._GetSpawnableCoord(SNIPPET_SIZE);
-  this._snippets[this._snippetsSpawned] = new Snippet(coord[0], coord[1]);
-  this._snippetsSpawned++;
-}
-
-World.prototype._SpawnRepo = function(codeSize, name) {
-  var coord = this._GetSpawnableCoord(RepoCodeSizeToSize(codeSize));
-  this._repos[this._reposSpawned] = new AIRepo(coord[0], coord[1], codeSize, name);
-  this._reposSpawned++;
-  this._reposActive++;
-}
-
-World.prototype._SpawnRandomRepo = function(targetCodeSize) {
-  var upperLimit = targetCodeSize+(RANDOM_REPO_SIZE_TOLERANCY/2);
-  var lowerLimit = targetCodeSize-(RANDOM_REPO_SIZE_TOLERANCY/2);
-
-  for (repo in SOFTWARE) { //Obviously better algorithms
-    codeSize = parseInt(repo);
-    if ((codeSize >= lowerLimit) && (codeSize <= upperLimit)) {
-      this._SpawnRepo(codeSize, SOFTWARE[repo]);
-      break;
-    }
-  }
+  this._repoMan = new RepoManager(this, this._player);
+  this._snippetMan = new SnippetManager(this, this._repoMan, this._player);
+  this._snippetMan.SetTargetSnippetCount(this._GetSimArea()/100 * TARGET_SNIPPET_DENSITY);
 }
 
 World.prototype._GetHiddenSimSizeExtend = function() {
@@ -60,9 +25,6 @@ World.prototype._GetSimArea = function() {
   var hiddenSimSizeExtend = this._GetHiddenSimSizeExtend();
   return (2*hiddenSimSizeExtend + this._camera.GetViewWidth())*(2*hiddenSimSizeExtend + this._camera.GetViewHeight());
 }
-World.prototype._GetTargetSnippetCount = function() {
-  return this._GetSimArea()/100 * TARGET_SNIPPET_DENSITY;
-}
 
 World.prototype._UpdateSimBoundries = function() {
   this._simBoundries = {left: this._camera.GetX() - this._camera.GetViewWidth()/2 - this._hiddenSimSizeExtend,
@@ -71,7 +33,7 @@ World.prototype._UpdateSimBoundries = function() {
                         bottom: this._camera.GetY() + this._camera.GetViewHeight()/2 + this._hiddenSimSizeExtend};
 }
 
-World.prototype._IsWithinSimBoundries = function(x, y) {
+World.prototype.IsWithinSimBoundries = function(x, y) {
   return (x <= this._simBoundries.right && x >= this._simBoundries.left) && (y <= this._simBoundries.bottom && y >= this._simBoundries.top);
 }
 
@@ -114,10 +76,6 @@ World.prototype._GetSpawnableCoord = function(radiusOfSpawnable) {
   return new Array(x, y);
 }
 
-World.prototype._IsCollided = function(x1, y1, r1, x2, y2, r2) {
-  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) < r1 + r2
-}
-
 World.prototype.HandleInput = function(event) {
   event.worldX = this._camera.ReverseProjectX(event.canvasX);
   event.worldY = this._camera.ReverseProjectY(event.canvasY);
@@ -130,51 +88,17 @@ World.prototype.Logic = function(deltaTime) {
   this._camera.Track(this._player.GetX(), this._player.GetY());
   this._UpdateSimBoundries();
 
-  for (snippet in this._snippets) {
-    this._snippets[snippet].Logic(deltaTime);
-    if (this._IsCollided(this._snippets[snippet].GetX(), this._snippets[snippet].GetY(), this._snippets[snippet].GetSize(), this._player.GetX(), this._player.GetY(), this._player.GetSize())) {
-      this._player.HandleSnippetCollision();
-      delete this._snippets[snippet];
-      this._SpawnSnippet(); //Immediately replace it for now.
-    } else if (!this._IsWithinSimBoundries(this._snippets[snippet].GetX(), this._snippets[snippet].GetY())) {
-      delete this._snippets[snippet];
-      this._SpawnSnippet();
-    } else if (this._reposActive >= 1) {
-      for (repo in this._repos) {
-        if (this._IsCollided(this._snippets[snippet].GetX(), this._snippets[snippet].GetY(), this._snippets[snippet].GetSize(), this._repos[repo].GetX(), this._repos[repo].GetY(), this._repos[repo].GetSize())) {
-          this._repos[repo].HandleSnippetCollision();
-          delete this._snippets[snippet];
-          this._SpawnSnippet();
-          break;
-        }
-      }
-    }
-  }
-
-  for (repo in this._repos) {
-    this._repos[repo].Logic(deltaTime);
-    if (!this._IsWithinSimBoundries(this._repos[repo].GetX(), this._repos[repo].GetY())) {
-      delete this._repos[repo];
-      this._reposActive--;
-    }
-  }
-
-  //if (this._player.GetCodeSize() >= 1000) {
-  if(this._reposActive == 0) {
-    //this._SpawnRandomRepo(this._player.GetCodeSize());
-    this._SpawnRandomRepo(6000);
-  }
-  //}
+  this._snippetMan.Logic(deltaTime);
+  this._repoMan.Logic(deltaTime);
 }
 
 World.prototype.Render = function() {
   this._player.Render(this._cContext);
 
-  for (snippet in this._snippets) {
-    this._snippets[snippet].Render(this._cContext);
-  }
+  this._snippetMan.Render(this._cContext);
+  this._repoMan.Render(this._cContext);
+}
 
-  for (repo in this._repos) {
-    this._repos[repo].Render(this._cContext);
-  }
+function IsCollided(x1, y1, r1, x2, y2, r2) {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) < r1 + r2
 }

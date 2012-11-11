@@ -1,8 +1,6 @@
-//Blob.prototype = new CollidableEntity();
+Blob.prototype = new CollidableEntity();
 function Blob(x, y, size, text) {
-  this._x = x;
-  this._y = y;
-  this._size = size;
+  CollidableEntity.call(this, x, y, size);
   this._text = text;
 
   this._velX = 0;
@@ -22,16 +20,4 @@ Blob.prototype.Render = function(cContext) {
   cContext.font="10px Arial";
   var textWidth = cContext.measureText(this._text).width;
   cContext.fillText(this._text, this._x - textWidth/2, this._y+2.5);
-}
-
-Blob.prototype.GetSize = function() {
-  return this._size;
-}
-
-Blob.prototype.GetX = function() {
-  return this._x;
-}
-
-Blob.prototype.GetY = function() {
-  return this._y;
 }

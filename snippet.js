@@ -19,7 +19,7 @@ Snippet.prototype.Logic = function(deltaTime) {
     this._SetSatisfaction();
   }
 
-  Blob.prototype.Logic.call(this, deltaTime); //Not really a JS programmer. Don't know what I'm doing, but this works! It seems large javascript apps seem to use .. libraries.. for OOP? Kind of like GObject for C? Please, hip JS guys, do whatever works best for inheritance.
+  Blob.prototype.Logic.call(this, deltaTime);
 }
 
 Snippet.prototype._SetSatisfaction = function() {
