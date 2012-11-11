@@ -68,7 +68,7 @@ Repo.prototype.HandleSnippetCollision = function() {
   this._size = RepoCodeSizeToSize(this._codeSize);
   var repo = this;
   this._developers.forEach(function(developer){
-    developer.UpdateRadius(repo._size);
+    developer.UpdateParentRadius(repo._size);
   });
 }
 
