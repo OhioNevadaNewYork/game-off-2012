@@ -19,8 +19,12 @@ EntityManager.prototype.DeleteEntity = function(entityId) {
   this._entitiesAlive--;
 }
 
-EntityManager.prototype.CheckForCollision = function(x, y, size) { //returns whatever entity collides with given point
+EntityManager.prototype.CheckForCollision = function(x, y, size, excludeId) { //returns whatever entity collides with given point
   for (entity in this._entities) {
+    if (entity == excludeId) {
+      continue;
+    }
+
     if (IsCollided(this._entities[entity].GetX(), this._entities[entity].GetY(), this._entities[entity].GetSize(), x, y, size)) {
       return [entity, this._entities[entity]];
     }

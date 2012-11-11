@@ -11,3 +11,7 @@ function Player() {
 Player.prototype.HandleInput = function(event) {
   this._SetTarget(event.worldX, event.worldY);
 }
+
+Player.prototype.Disintegrate = function(terminator) {
+  alert("Killed by "+terminator.GetName()+". You had "+this._codeSize+" lines of code.");
+}

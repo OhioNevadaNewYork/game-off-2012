@@ -20,13 +20,11 @@ SnippetManager.prototype.Logic = function(deltaTime) {
 
   EntityManager.prototype.Logic.call(this, deltaTime);
 
-  //Temp until physics refactor
   for (snippet in this._entities) {
     var repo = this._repoMan.CheckForCollision(this._entities[snippet].GetX(), this._entities[snippet].GetY(), this._entities[snippet].GetSize());
     if(repo) {
       repo[1].HandleSnippetCollision();
       this.DeleteEntity(snippet);
-      break;
     }
   }
 }

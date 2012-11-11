@@ -26,6 +26,11 @@ Repo.prototype.AddDeveloper = function() {
   this._developers.push(new Developer(this._x, this._y, this._size, angle));
 }
 
+Repo.prototype.AddCode = function(codeSize) {
+  this._codeSize += codeSize;
+  this._size = RepoCodeSizeToSize(this._codeSize);
+}
+
 Repo.prototype._SetTarget = function(x, y) {
   this._targetX = x;
   this._targetY = y;
@@ -64,19 +69,38 @@ Repo.prototype.DebugRender = function(cContext) {
 }
 
 Repo.prototype.HandleSnippetCollision = function() {
-  this._codeSize += 70;
-  this._size = RepoCodeSizeToSize(this._codeSize);
+  this.AddCode(70);
   var repo = this;
   this._developers.forEach(function(developer){
     developer.UpdateParentRadius(repo._size);
   });
 }
 
+Repo.prototype.HandleRepoCollision = function(repo) {
+  //To be clear - this is called only if the other repo does not destroy you.
+  this.AddCode(repo.GetCodeSize()/2);
+
+  for(var i = 0; i < repo.GetDeveloperCount() - 1; i++) {
+    this.AddDeveloper();
+  }
+}
+
+Repo.prototype.Disintegrate = function(terminator) {
+  //Special effects etc. Need graphics.
+}
+
 Repo.prototype.GetCodeSize = function() {
   return this._codeSize;
 }
 
-//Going to not try testing how to make static functions, so here is a global:
+Repo.prototype.GetName = function() {
+  return this._text;
+}
+
+Repo.prototype.GetDeveloperCount = function() {
+  return this._developers.length;
+}
+
 function RepoCodeSizeToSize(codeSize) {
   return Math.sqrt(codeSize);
 }

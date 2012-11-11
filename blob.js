@@ -21,3 +21,7 @@ Blob.prototype.DebugRender = function(cContext) {
   var textWidth = cContext.measureText(this._text).width;
   cContext.fillText(this._text, this._x - textWidth/2, this._y+2.5);
 }
+
+Blob.prototype.GetSpeed = function() {
+  return Math.sqrt(Math.pow(this._velX, 2) + Math.pow(this._velY, 2));
+}

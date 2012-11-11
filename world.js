@@ -99,6 +99,10 @@ World.prototype.Logic = function(deltaTime) {
 
   this._repoMan.Logic(deltaTime);
   this._snippetMan.Logic(deltaTime);
+
+  if (!this._player) {
+    alert("Game over");
+  }
 }
 
 World.prototype.DebugRender = function() {

@@ -60,6 +60,7 @@ Game.prototype.Step = function(deltaTime) {
   }
 
   this._world.Logic(deltaTime);
+
   tooltipMan.Logic(deltaTime);
 
   this._Render();
