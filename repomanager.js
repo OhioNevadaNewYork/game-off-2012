@@ -1,4 +1,4 @@
-var RANDOM_REPO_SIZE_TOLERANCY = 2000; //Essentially how volatile/unstable/variable the difficulty is. TODO: Should follow normal distribution.
+var RANDOM_REPO_SIZE_TOLERANCY = 4000; //Essentially how volatile/unstable/variable the difficulty is. TODO: Should follow normal distribution.
 
 RepoManager.prototype = new EntityManager();
 function RepoManager(world, player) {
@@ -25,12 +25,12 @@ RepoManager.prototype._SpawnRandomRepo = function(targetCodeSize) {
 }
 
 RepoManager.prototype.Logic = function(deltaTime) {
-  //if (this._player.GetCodeSize() >= 1000) {
+  if (this._player.GetCodeSize() >= 1000) {
     if(this.GetEntityCount() == 0) {
-      //this._SpawnRandomRepo(this._player.GetCodeSize());
-      this._SpawnRandomRepo(6000);
+      this._SpawnRandomRepo(this._player.GetCodeSize());
+      //this._SpawnRandomRepo(6000);
     }
-  //}
+  }
 
   EntityManager.prototype.Logic.call(this, deltaTime);
 }

@@ -1,3 +1,5 @@
+var GOLDEN_ANGLE = 2.39996;
+
 Repo.prototype = new Blob();
 function Repo(x, y, codeSize, name) {
   this._codeSize = codeSize;
@@ -7,7 +9,21 @@ function Repo(x, y, codeSize, name) {
   this._targetX = 0;
   this._targetY = 0;
 
+  this._developers = new Array();
+
   Blob.call(this, x, y, RepoCodeSizeToSize(this._codeSize), name);
+
+  for(var i = 0; i < Math.floor(this._codeSize/1000); i++) {
+    this.AddDeveloper();
+  }
+}
+
+Repo.prototype.AddDeveloper = function() {
+  var angle = 0;
+  if(this._developers.length >= 1) {
+    angle = this._developers[this._developers.length-1].GetAngle() + GOLDEN_ANGLE;
+  }
+  this._developers.push(new Developer(this._x, this._y, this._size, angle));
 }
 
 Repo.prototype._SetTarget = function(x, y) {
@@ -31,11 +47,29 @@ Repo.prototype.Logic = function(deltaTime) {
   }
 
   Blob.prototype.Logic.call(this, deltaTime);
+
+  var repo = this;
+  this._developers.forEach(function(developer){
+    developer.UpdateCenter(repo._x, repo._y);
+    developer.Logic(deltaTime);
+  });
+}
+
+Repo.prototype.Render = function(cContext) {
+  Blob.prototype.Render.call(this, cContext);
+
+  this._developers.forEach(function(developer){
+    developer.Render(cContext);
+  });
 }
 
 Repo.prototype.HandleSnippetCollision = function() {
   this._codeSize += 70;
   this._size = RepoCodeSizeToSize(this._codeSize);
+  var repo = this;
+  this._developers.forEach(function(developer){
+    developer.UpdateRadius(repo._size);
+  });
 }
 
 Repo.prototype.GetCodeSize = function() {
