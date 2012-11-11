@@ -15,8 +15,16 @@ a {
   margin-top: 80px;
 }
 
-#overlay-container { /*the reason this exists is so that canvas.offsetLeft isn't 0 because of #container being set to position:relative. Possibly a better workaround out there, doesn't matter.*/
+#overlay-container-container { /*the reason this exists is so that canvas.offsetLeft isn't 0 because of #container being set to position:relative. Possibly a better workaround out there, doesn't matter.*/
   position: relative;
+}
+
+#overlay-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 800px;
+  height: 600px;
 }
 
 #blurb {

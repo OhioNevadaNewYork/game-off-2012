@@ -1,12 +1,23 @@
-var D_KEYCODE = 68; //'D'
+var D_KEYCODE = 68;
 var ESC_KEYCODE = 27;
 var PAUSE_KEYCODE = 19;
+
+var tooltipMan = new TooltipManager();
 
 function Game(canvas) {
   this._canvas = canvas;
   this._cContext = canvas.getContext("2d");
+
   this._camera = new Camera(this._cContext, this._canvas.width, this._canvas.height);
   this._world = new World(this._cContext, this._camera);
+
+  this._timeSpentPlaying = 0;
+
+  this._needsTooltip = {"nav": true,
+                        "absorb": true,
+                        "warn": true,
+                        "fight": true,
+                        "developers": true};
 
   this._paused = false;
   this._debugRender = true;
@@ -21,8 +32,11 @@ Game.prototype.HandleInput = function(event) {
     } else {
       this._HidePauseScreen();
     }
-
     return;
+  }
+
+  if (event.type == "click") {
+    this._needsTooltip["nav"] = false;
   }
 
   this._world.HandleInput(event);
@@ -33,7 +47,20 @@ Game.prototype.Step = function(deltaTime) {
     return;
   }
 
+  this._timeSpentPlaying += deltaTime;
+
+  if ((this._timeSpentPlaying >= 2) && (this._needsTooltip["nav"] == true)) {
+    tooltipMan.Tooltip("Let your repository navigate the world by clicking in the desired direction.");
+    this._needsTooltip["nav"] = false;
+  }
+
+  if ((this._timeSpentPlaying >= 18) && (this._needsTooltip["absorb"] == true)) {
+    tooltipMan.Tooltip("You must absorb more code to become the best in this world.");
+    this._needsTooltip["absorb"] = false;
+  }
+
   this._world.Logic(deltaTime);
+  tooltipMan.Logic(deltaTime);
 
   this._Render();
 }
@@ -66,8 +93,7 @@ Game.prototype._DisplayPauseScreen = function() {
     game._Render();
   });
 
-  /*this._tag = document.createElement("div");
-  var container = document.getElementById("overlay-container");
+  /*this._tag = document.createElement("div");;
   container.insertBefore(this._tag, container.childNodes[0]);
   this._tag.id = "debug-tag";
   this._tag.innerHTML = "DEBUG";*/
@@ -77,4 +103,3 @@ Game.prototype._HidePauseScreen = function() {
   var pauseScreen = document.getElementById("pause-screen");
   pauseScreen.parentNode.removeChild(pauseScreen);
 }
-
