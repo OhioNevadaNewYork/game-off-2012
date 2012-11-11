@@ -7,47 +7,8 @@
   <title>OhioNevadaNewYork Game</title>
   <meta name="description" content="Not everyone survives the software wars" />
 
-  <style type="text/css">
-    body, html {
-      background: #050505;
-      color: #fdfdfd;
-    }
-
-    a {
-      color: #c0c0c0;
-    }
-
-    #container {
-      width: 800px;
-      margin: 0 auto;
-      margin-top: 80px;
-    }
-
-    #overlay-container { /*the reason this exists is so that canvas.offsetLeft isn't 0 because of #container being set to position:relative. Possibly a better workaround out there, doesn't matter.*/
-      position: relative;
-    }
-
-    #debug-screen {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      width: 700px;
-      padding: 30px;
-      background: red;
-      color: white;
-      opacity: 0.8;
-    }
-
-    #canvas {
-      background-color: #fdfdfd;
-    }
-
-    #blurb {
-      margin-top: 10px;
-    }
-
-  </style>
-  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <link href="page.css" rel="stylesheet" type="text/css" media="screen" />
+  <link href="game.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
   <div id="container">

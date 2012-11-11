@@ -1,0 +1,14 @@
+#debug-screen {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 700px;
+  padding: 30px;
+  background: red;
+  color: white;
+  opacity: 0.8;
+}
+
+#canvas {
+  background-color: #fdfdfd;
+}
