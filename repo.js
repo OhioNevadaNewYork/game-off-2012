@@ -1,5 +1,5 @@
 Repo.prototype = new Blob();
-function Repo(cContext, x, y, codeSize, name) {
+function Repo(x, y, codeSize, name) {
   this._codeSize = codeSize;
 
   this._speed = 220; //Make this a function of codesize later when proper acceleration & physics are implemented.
@@ -7,7 +7,7 @@ function Repo(cContext, x, y, codeSize, name) {
   this._targetX = 0;
   this._targetY = 0;
 
-  Blob.call(this, cContext, x, y, RepoCodeSizeToSize(this._codeSize), name);
+  Blob.call(this, x, y, RepoCodeSizeToSize(this._codeSize), name);
 }
 
 Repo.prototype._SetTarget = function(x, y) {

@@ -13,7 +13,7 @@ function World(cContext, camera) {
 
   //this._unsimulatedPersistentState = {seenRepos: {}};
 
-  this._player = new Player(this._cContext);
+  this._player = new Player();
 
   this._repos = {};
   this._reposSpawned = 0;
@@ -29,13 +29,13 @@ function World(cContext, camera) {
 
 World.prototype._SpawnSnippet = function() {
   var coord = this._GetSpawnableCoord(SNIPPET_SIZE);
-  this._snippets[this._snippetsSpawned] = new Snippet(this._cContext, coord[0], coord[1]);
+  this._snippets[this._snippetsSpawned] = new Snippet(coord[0], coord[1]);
   this._snippetsSpawned++;
 }
 
 World.prototype._SpawnRepo = function(codeSize, name) {
   var coord = this._GetSpawnableCoord(RepoCodeSizeToSize(codeSize));
-  this._repos[this._reposSpawned] = new AIRepo(this._cContext, coord[0], coord[1], codeSize, name);
+  this._repos[this._reposSpawned] = new AIRepo(coord[0], coord[1], codeSize, name);
   this._reposSpawned++;
   this._reposActive++;
 }
@@ -168,13 +168,13 @@ World.prototype.Logic = function(deltaTime) {
 }
 
 World.prototype.Render = function() {
-  this._player.Render();
+  this._player.Render(this._cContext);
 
   for (snippet in this._snippets) {
-    this._snippets[snippet].Render();
+    this._snippets[snippet].Render(this._cContext);
   }
 
   for (repo in this._repos) {
-    this._repos[repo].Render();
+    this._repos[repo].Render(this._cContext);
   }
 }

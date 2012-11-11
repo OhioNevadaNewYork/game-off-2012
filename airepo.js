@@ -1,6 +1,6 @@
 AIRepo.prototype = new Repo();
-function AIRepo(cContext, x, y, codeSize, name) {
-  Repo.call(this, cContext, x, y, codeSize, name);
+function AIRepo(x, y, codeSize, name) {
+  Repo.call(this, x, y, codeSize, name);
 
   var tx;
   var ty;

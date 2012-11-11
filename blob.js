@@ -1,6 +1,5 @@
-function Blob(cContext, x, y, size, text) {
-  this._cContext = cContext;
-
+//Blob.prototype = new CollidableEntity();
+function Blob(x, y, size, text) {
   this._x = x;
   this._y = y;
   this._size = size;
@@ -15,14 +14,14 @@ Blob.prototype.Logic = function(deltaTime) {
   this._y += this._velY*deltaTime;
 }
 
-Blob.prototype.Render = function() {
-  this._cContext.beginPath();
-  this._cContext.arc(this._x, this._y, this._size, 0, 2*Math.PI);
-  this._cContext.stroke();
+Blob.prototype.Render = function(cContext) {
+  cContext.beginPath();
+  cContext.arc(this._x, this._y, this._size, 0, 2*Math.PI);
+  cContext.stroke();
 
-  this._cContext.font="10px Arial";
-  var textWidth = this._cContext.measureText(this._text).width;
-  this._cContext.fillText(this._text, this._x - textWidth/2, this._y+2.5);
+  cContext.font="10px Arial";
+  var textWidth = cContext.measureText(this._text).width;
+  cContext.fillText(this._text, this._x - textWidth/2, this._y+2.5);
 }
 
 Blob.prototype.GetSize = function() {
