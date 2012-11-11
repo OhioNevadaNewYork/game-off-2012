@@ -14,4 +14,8 @@ window.onload = function() {
 
     game.HandleInput(event);
   });
+
+  document.addEventListener('keydown', function(event){
+    game.HandleInput(event);
+  });
 };

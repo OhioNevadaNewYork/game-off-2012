@@ -23,6 +23,21 @@
       margin-top: 80px;
     }
 
+    #overlay-container { /*the reason this exists is so that canvas.offsetLeft isn't 0 because of #container being set to position:relative. Possibly a better workaround out there, doesn't matter.*/
+      position: relative;
+    }
+
+    #debug-screen {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 700px;
+      padding: 30px;
+      background: red;
+      color: white;
+      opacity: 0.8;
+    }
+
     #canvas {
       background-color: #fdfdfd;
     }
@@ -36,6 +51,7 @@
 </head>
 <body>
   <div id="container">
+    <div id="overlay-container"></div>
     <canvas id="canvas" width="800" height="600"></canvas>
     <div id="blurb">
       A GitHub Game Off 2012 <a href="https://github.com/OhioNevadaNewYork/game-off-2012">entry</a>.
