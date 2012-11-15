@@ -4,7 +4,7 @@ Repo.prototype = new Blob();
 function Repo(x, y, codeSize, name) {
   this._codeSize = codeSize;
 
-  this._speed = 250; //Make this a function of codesize later when proper acceleration & physics are implemented.
+  this._force = 250; //Make this a function of codesize later when proper acceleration & physics are implemented.
 
   this._targetX = 0;
   this._targetY = 0;
@@ -37,7 +37,7 @@ Repo.prototype._SetTarget = function(x, y) {
 
   //The motion is smoothed via the magic of iterative physics integration now
   var angle = Math.atan2(this._targetY-this._y, this._targetX-this._x);
-  this.AddForce(Math.cos(angle)*this._speed, Math.sin(angle)*this._speed);
+  this.AddForce(Math.cos(angle)*this._force, Math.sin(angle)*this._force);
 }
 
 Repo.prototype.Logic = function(deltaTime) {
