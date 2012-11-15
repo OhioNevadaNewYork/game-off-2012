@@ -14,6 +14,8 @@ function Blob(x, y, size, text) {
   //friction (drag) on the blob. The LOWER this
   //value, the MORE drag
   this._friction = 0.985;
+  //terminal velocity
+  this._terminalVelocity = 200;
 }
 
 Blob.prototype.Logic = function(deltaTime) {
@@ -22,6 +24,13 @@ Blob.prototype.Logic = function(deltaTime) {
   var accY = this._forceY / this._mass;
   this._velX += accX * deltaTime;
   this._velY += accY * deltaTime;
+  var speed = Math.sqrt(Math.pow(this._velX, 2) + Math.pow(this._velY, 2))
+  //handle terminal velocity
+  if (speed > this._terminalVelocity) {
+    var velmul = this._terminalVelocity / speed
+    this._velX *= velmul
+    this._velY *= velmul
+  }
   this._x += this._velX * deltaTime;
   this._y += this._velY * deltaTime;
   //clear force accumulators

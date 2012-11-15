@@ -1,5 +1,5 @@
 var STARTING_CODESIZE = 500;
-var PLAYER_SPEED = 1000;
+var PLAYER_SPEED = 1200;
 var NAVIGATION_TOLERANCY = 10;
 
 Player.prototype = new Repo();
