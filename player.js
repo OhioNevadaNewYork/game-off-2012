@@ -9,7 +9,9 @@ function Player() {
 }
 
 Player.prototype.HandleInput = function(event) {
-  this._SetTarget(event.worldX, event.worldY);
+  if (event.type == "click") {
+    this._SetTarget(event.worldX, event.worldY);
+  }
 }
 
 Player.prototype.AddDeathListener = function(listenerFunc) {
