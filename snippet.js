@@ -1,5 +1,5 @@
 var SNIPPET_SATISFACTIONMAX = 5;
-var SNIPPET_SPEEDMAX = 50;
+var SNIPPET_FORCEMAX = 1700;
 var SNIPPET_SIZE = 20;
 
 Snippet.prototype = new Blob();
@@ -13,9 +13,8 @@ Snippet.prototype.Logic = function(deltaTime) {
   this._satisfaction -= deltaTime;
   if (this._satisfaction <= 0) {
     var newDirection = Math.random()*2*Math.PI;
-    var newSpeed = SNIPPET_SPEEDMAX - (SNIPPET_SPEEDMAX*0.5)*Math.random();
-    this._velX = Math.cos(newDirection)*newSpeed;
-    this._velY = Math.sin(newDirection)*newSpeed;
+    var force = SNIPPET_FORCEMAX - (SNIPPET_FORCEMAX*0.5)*Math.random();
+    this.AddForce(Math.cos(newDirection)*force, Math.sin(newDirection)*force);
     this._SetSatisfaction();
   }
 
