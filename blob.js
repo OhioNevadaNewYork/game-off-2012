@@ -13,7 +13,7 @@ function Blob(x, y, size, text) {
   this._mass = 1.0;
   //friction (drag) on the blob. The LOWER this
   //value, the MORE drag
-  this._friction = 0.985;
+  this._friction = 0.62;
   //terminal velocity
   this._terminalVelocity = 200;
 }
@@ -36,9 +36,9 @@ Blob.prototype.Logic = function(deltaTime) {
   //clear force accumulators
   this._forceX = 0;
   this._forceY = 0;
-  //friction
-  this._velX *= this._friction;
-  this._velY *= this._friction;
+  //integrate friction
+  this._velX -= deltaTime*(this._velX-this._friction*this._velX);
+  this._velY -= deltaTime*(this._velY-this._friction*this._velY);
 }
 
 //Add a force to the blob
