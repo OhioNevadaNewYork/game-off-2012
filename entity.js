@@ -15,7 +15,3 @@ CollidableEntity.prototype.GetX = function() {
 CollidableEntity.prototype.GetY = function() {
   return this._y;
 }
-
-CollidableEntity.prototype.GetY = function() {
-  return this._y;
-}

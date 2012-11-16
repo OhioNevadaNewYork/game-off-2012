@@ -41,15 +41,6 @@ Repo.prototype._SetTarget = function(x, y) {
 }
 
 Repo.prototype.Logic = function(deltaTime) {
-  //Navigation
-  //TODO: Since motion is now based on force impulses, this shouldn't be
-  //necessary, but I'm leaving it simply commented out for now.
-  /*if (Math.abs(this._x - this._targetX) < NAVIGATION_TOLERANCY) {
-    this._velX = 0;
-  }
-  if (Math.abs(this._y - this._targetY) < NAVIGATION_TOLERANCY) {
-    this._velY = 0;
-  }*/
 
   Blob.prototype.Logic.call(this, deltaTime);
 
