@@ -2,18 +2,17 @@ AIRepo.prototype = new Repo();
 function AIRepo(x, y, codeSize, name) {
   Repo.call(this, x, y, codeSize, name);
 
-  var tx;
-  var ty;
+  this._targetX = 0;
+  this._targetY = 0;
   do {
-    tx = ((Math.random()*10000)-5000) + x;
-    ty = ((Math.random()*10000)-5000) + y;
-  } while (Math.sqrt(Math.pow(tx, 2) + Math.pow(ty, 2)) < 2000)
-
-  this._SetTarget(tx, ty);
+    this._targetX = ((Math.random()*10000)-5000) + x;
+    this._targetY = ((Math.random()*10000)-5000) + y;
+  } while (Math.sqrt(Math.pow(this._targetX, 2) + Math.pow(this._targetY, 2)) < 2000)
 }
-
 AIRepo.prototype.Logic = function(deltaTime) {
   //AI.. ?
+
+  this.AddForce(this._targetX-this._x, this._targetY-this._y);
 
   Repo.prototype.Logic.call(this, deltaTime);
 }

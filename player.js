@@ -10,7 +10,8 @@ function Player() {
 
 Player.prototype.HandleInput = function(event) {
   if (event.type == "click") {
-    this._SetTarget(event.worldX, event.worldY);
+    var angle = Math.atan2(event.worldY-this._y, event.worldX-this._x);
+    this.AddForce(Math.cos(angle)*this._force, Math.sin(angle)*this._force);
   }
 }
 
