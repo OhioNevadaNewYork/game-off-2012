@@ -16,9 +16,38 @@ function Blob(x, y, size, text) {
   this._friction = 0.62;
   //terminal velocity
   this._terminalVelocity = 200;
+
+  //force over time application
+  this._forceTX = 0.0;
+  this._forceTY = 0.0;
+  this._forceT  = 0.0;
 }
 
 Blob.prototype.Logic = function(deltaTime) {
+  //force over time
+  if (this._forceT > 0.0) {
+    var fmul = 0.0
+    if (deltaTime >= this._forceT) {
+      fmul = 1.0;
+    }
+    else {
+      fmul = deltaTime / this._forceT;
+    }
+    var applyForceX = fmul * this._forceTX;
+    var applyForceY = fmul * this._forceTY;
+    this._forceX += applyForceX;
+    this._forceY += applyForceY;
+    this._forceT -= deltaTime;
+    if (this._forceT <= 0.0) {
+      this._forceT = 0.0;
+      this._forceTX = 0.0;
+      this._forceTY = 0.0;
+    }
+    else {
+      this._forceTX -= applyForceX;
+      this._forceTY -= applyForceY;
+    }
+  }
   //Simple Euler Integration
   var accX = this._forceX / this._mass;
   var accY = this._forceY / this._mass;
@@ -46,6 +75,14 @@ Blob.prototype.AddForce = function(fx, fy) {
   this._forceX += fx;
   this._forceY += fy;
 }
+
+//Add a force to be applied over some amount of time
+Blob.prototype.AddForceOverTime = function(fx, fy, t) {
+  this._forceTX += fx;
+  this._forceTY += fy;
+  this._forceT  += t;
+}
+
 
 Blob.prototype.DebugRender = function(cContext) {
   cContext.beginPath();
